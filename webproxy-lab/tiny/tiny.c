@@ -96,7 +96,6 @@ void doit(int fd)                           // fd: 이 클라이언트와 통신
     char filename[MAXLINE], cgiargs[MAXLINE]; // 실제 파일경로, CGI 인자
     rio_t rio;                              // 버퍼링된 입력용 RIO 구조체
 
-    /* 요청 라인과 헤더 읽기 */
     Rio_readinitb(&rio, fd);                // RIO 초기화(소켓 fd에 연결)
     Rio_readlineb(&rio, buf, MAXLINE);      // 첫 줄(요청 라인) 읽기
     printf("Request headers:\n");           // 디버깅용 출력
@@ -122,11 +121,13 @@ void doit(int fd)                           // fd: 이 클라이언트와 통신
     }
 
     if (is_static)                          // 정적 파일이면
-    { /* 정적 콘텐츠 */
+    {
+        // 정적
         serve_static(fd, filename, sbuf.st_size); // 파일 크기 넘겨 전송
     }
     else                                     // 동적이면(CGI)
-    { /* 동적 콘텐츠 */
+    {
+        // 동적
         serve_dynamic(fd, filename, cgiargs);    // 실행 결과를 전송
     }
 }
